@@ -1,6 +1,0 @@
-const status = await sdk.checkTransferStatus(transactionSignature);
-console.log('Transfer status:', {
-  status: status.status,
-  blockTime: status.blockTime,
-  hookValidation: status.hookValidation
-});
