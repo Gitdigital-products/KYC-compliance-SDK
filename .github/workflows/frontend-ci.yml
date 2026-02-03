@@ -6,6 +6,9 @@ on:
   push:
     branches: ["dev"]
 
+permissions:
+  contents: read
+
 jobs:
   install-build-test:
     runs-on: ubuntu-latest
