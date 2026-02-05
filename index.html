@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC SDK | Digital Compliance Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-[#05070a] text-slate-300 font-sans selection:bg-blue-500/30">
+
+    <nav class="border-b border-white/5 bg-[#0a0c10]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)]">
+                    <i class="fa-solid fa-fingerprint text-white text-sm"></i>
+                </div>
+                <span class="font-bold tracking-tighter text-white">KYC<span class="text-blue-500">_CORE</span></span>
+            </div>
+            <div class="flex items-center gap-6 text-xs font-mono">
+                <span class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> SYSTEM_READY</span>
+                <a href="#" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded transition">DOCS</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto py-12 px-6">
+        <header class="mb-12">
+            <h1 class="text-4xl font-black text-white mb-4">Verification Sandbox</h1>
+            <p class="text-slate-500 max-w-2xl">Test our SDK integration. This interface simulates real-time document extraction and biometric matching via our API layer.</p>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            
+            <div class="bg-[#0a0c10] border border-white/5 rounded-2xl p-8">
+                <h3 class="text-white font-bold mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-blue-500"></i> Document Analysis
+                </h3>
+                <div id="dropzone" class="border-2 border-dashed border-white/10 rounded-xl p-10 text-center hover:border-blue-500/50 transition cursor-pointer group">
+                    <i class="fa-solid fa-cloud-arrow-up text-3xl mb-4 group-hover:text-blue-400"></i>
+                    <p class="text-sm font-medium">Upload ID or Passport</p>
+                    <p class="text-xs text-slate-600 mt-2">Support: JPG, PNG, PDF (Max 5MB)</p>
+                </div>
+                
+                <div class="mt-8 space-y-4">
+                    <div class="flex justify-between text-xs font-mono">
+                        <span>OCR Extraction</span>
+                        <span id="ocrStatus" class="text-slate-500">IDLE</span>
+                    </div>
+                    <div class="w-full bg-white/5 h-1.5 rounded-full overflow-hidden">
+                        <div id="progressBar" class="w-0 h-full bg-blue-600 transition-all duration-700"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-black rounded-2xl border border-white/5 p-6 font-mono text-sm overflow-hidden relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50"></div>
+                <div class="flex items-center gap-2 mb-4 border-b border-white/5 pb-4">
+                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="ml-2 text-xs text-slate-500">Terminal — SDK_OUTPUT</span>
+                </div>
+                <div id="console" class="space-y-2 text-blue-400 h-64 overflow-y-auto custom-scrollbar">
+                    <p>> [SYSTEM]: Initializing SDK...</p>
+                    <p>> [SYSTEM]: Ready for input.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mt-12">
+            <div class="p-6 bg-[#0a0c10] border border-white/5 rounded-xl">
+                <i class="fa-solid fa-shield-virus text-blue-500 mb-4"></i>
+                <h4 class="text-white font-bold text-sm">Anti-Spoofing</h4>
+                <p class="text-xs text-slate-500 mt-2">Liveness detection to prevent 2D/3D presentation attacks.</p>
+            </div>
+            <div class="p-6 bg-[#0a0c10] border border-white/5 rounded-xl">
+                <i class="fa-solid fa-earth-americas text-purple-500 mb-4"></i>
+                <h4 class="text-white font-bold text-sm">Global Coverage</h4>
+                <p class="text-xs text-slate-500 mt-2">Supports 190+ countries and 3,500+ ID types.</p>
+            </div>
+            <div class="p-6 bg-[#0a0c10] border border-white/5 rounded-xl">
+                <i class="fa-solid fa-code-branch text-green-500 mb-4"></i>
+                <h4 class="text-white font-bold text-sm">Web3 Integration</h4>
+                <p class="text-xs text-slate-500 mt-2">On-chain identity verification via Solana Adapter.</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const consoleEl = document.getElementById('console');
+        const progressBar = document.getElementById('progressBar');
+
+        function log(msg, color = 'text-blue-400') {
+            const p = document.createElement('p');
+            p.className = color;
+            p.innerText = `> ${msg}`;
+            consoleEl.appendChild(p);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        dropzone.addEventListener('click', () => {
+            log('Starting Document Upload...', 'text-yellow-500');
+            progressBar.style.width = '100%';
+            
+            setTimeout(() => log('Extracting OCR data...', 'text-blue-400'), 1000);
+            setTimeout(() => log('MATCH: Document authentic.', 'text-green-500'), 2500);
+            setTimeout(() => log('PENDING: Biometric Selfie check...', 'text-blue-400'), 3500);
+            setTimeout(() => {
+                log('VERIFIED: KYC COMPLIANT', 'text-white font-bold bg-green-900/20 px-2 rounded');
+                progressBar.style.backgroundColor = '#10b981';
+            }, 5000);
+        });
+    </script>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    </style>
+</body>
+</html>
+
